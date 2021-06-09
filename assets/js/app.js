@@ -52,7 +52,7 @@ $.ajax({
 
       $.ajax({
         type: "get",
-        url: `http://api.openweathermap.org/data/2.5/weather?q=${response.capital}&appid=44b1fe8a6c0207544cdd674445971577`,
+        url: `https://api.openweathermap.org/data/2.5/weather?q=${response.capital}&appid=44b1fe8a6c0207544cdd674445971577`,
       }).done(function (response) {
         $("#weather-report").html(`
           <h3 class="text-center text-white mt-2 information-heading">${response.name} وضعیت هوای شهر</h3>
