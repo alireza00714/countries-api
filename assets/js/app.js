@@ -4,15 +4,13 @@ $.ajax({
 }).done(function (res) {
   res.forEach((item) => {
     $("#select-country").append(`
-      <option value="${item.alpha3Code}">
-        ${item.translations.fa}
-      </option>
+      <option value="${item.name}">
       `);
   });
   $("#select-country").change(function () {
     $.ajax({
       type: "get",
-      url: `https://restcountries.eu/rest/v2/alpha/${$(this).val()}`,
+      url: `https://restcountries.eu/rest/v2/name/${$(this.val())}?fullText=true`,
     }).done((response) => {
       $("#information").html(`
         <h3 class="text-center text-white mt-2 information-heading">اطلاعات</h3>
@@ -52,7 +50,7 @@ $.ajax({
 
       $.ajax({
         type: "get",
-        url: `https://api.openweathermap.org/data/2.5/weather?q=${response.capital}&appid=44b1fe8a6c0207544cdd674445971577`,
+        url: `http://api.openweathermap.org/data/2.5/weather?q=${response.capital}&appid=44b1fe8a6c0207544cdd674445971577`,
       }).done(function (response) {
         $("#weather-report").html(`
           <h3 class="text-center text-white mt-2 information-heading">${response.name} وضعیت هوای شهر</h3>
