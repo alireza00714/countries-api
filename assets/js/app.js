@@ -3,54 +3,53 @@ $.ajax({
   url: "https://restcountries.eu/rest/v2/all",
 }).done(function (res) {
   res.forEach((item) => {
-    $("#select-country").append(`
-      <option value="${item.name}">
+    $("#countries").append(`
+      <option value="${item.name}"></option>
       `);
   });
-  $("#select-country").change(function () {
+  $("#countries-input").change(function () {
     $.ajax({
       type: "get",
-      url: `https://restcountries.eu/rest/v2/name/${$(this.val())}?fullText=true`,
+      url: `https://restcountries.eu/rest/v2/name/${$(this).val()}?fullText=true`,
     }).done((response) => {
       $("#information").html(`
         <h3 class="text-center text-white mt-2 information-heading">اطلاعات</h3>
         <hr class="text-white m-0 p-0" />
         <div class="d-flex justify-content-between p-3 w-100">
-        <span class="information-content">${response.name}</span>
+        <span class="information-content">${response[0].name}</span>
         <span class="information-content">:نام</span>
       </div>
       <div class="d-flex justify-content-between p-3 w-100">
-        <span class="information-content">${response.nativeName}</span>
+        <span class="information-content">${response[0].nativeName}</span>
         <span class="information-content">:نام اصلی</span>
       </div>
       <div class="d-flex justify-content-between p-3 w-100">
-        <span class="information-content">${response.capital}</span>
+        <span class="information-content">${response[0].capital}</span>
         <span class="information-content">:پایتخت</span>
       </div>
       <div class="d-flex justify-content-between p-3 w-100">
-        <span class="information-content">${response.region}</span>
+        <span class="information-content">${response[0].region}</span>
         <span class="information-content">:قاره</span>
       </div>
       <div class="d-flex justify-content-between p-3 w-100">
-        <span class="information-content fa-digits">${response.population}</span>
+        <span class="information-content fa-digits">${response[0].population}</span>
         <span class="information-content">:جمعیت</span>
       </div>
       <div class="d-flex justify-content-between p-3 w-100">
-        <span class="information-content">${response.timezones}</span>
+        <span class="information-content">${response[0].timezones}</span>
         <span class="information-content">:منطقه زمانی</span>
       </div>
         `);
 
-      showMap(response.latlng[0], response.latlng[1]);
-
       $("#flag").html(`
-        <img class="w-100 h-100" style="border-radius: 1rem;" src="${response.flag}" alt="" srcset="">
+        <img class="w-100 h-100" style="border-radius: 1rem;" src="${response[0].flag}" alt="" srcset="">
         `);
-      $("#tell-code").text(`+${response.callingCodes[0]}`);
+
+      $("#tell-code").text(`+${response[0].callingCodes[0]}`);
 
       $.ajax({
         type: "get",
-        url: `http://api.openweathermap.org/data/2.5/weather?q=${response.capital}&appid=44b1fe8a6c0207544cdd674445971577`,
+        url: `http://api.openweathermap.org/data/2.5/weather?q=${response[0].capital}&appid=44b1fe8a6c0207544cdd674445971577`,
       }).done(function (response) {
         $("#weather-report").html(`
           <h3 class="text-center text-white mt-2 information-heading">${response.name} وضعیت هوای شهر</h3>
@@ -76,6 +75,8 @@ $.ajax({
           </div>
         `);
       });
+
+      showMap(response[0].latlng[0], response[0].latlng[1]);
     });
   });
 });
